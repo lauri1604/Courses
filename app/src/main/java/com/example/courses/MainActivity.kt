@@ -3,7 +3,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +19,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -27,8 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -108,8 +106,12 @@ fun TopicCard(topic: Topic, modifier: Modifier = Modifier) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    // Dibuja una marca decorativa sin depender de un recurso gráfico adicional.
-                    CourseMark()
+                    Icon(
+                        painter = painterResource(R.drawable.ic_grain),
+                        contentDescription = null,
+                        modifier = Modifier.size(12.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                     Text(
                         text = topic.availableCourses.toString(),
                         style = MaterialTheme.typography.bodySmall
@@ -120,28 +122,18 @@ fun TopicCard(topic: Topic, modifier: Modifier = Modifier) {
     }
 }
 
-@Composable
-private fun CourseMark() {
-    val markColor = MaterialTheme.colorScheme.onSurfaceVariant
-    Canvas(modifier = Modifier.size(12.dp)) {
-        val spacing = size.width / 3
-        for (index in 0..2) {
-            val position = spacing * index + spacing / 2
-            drawLine(
-                color = markColor,
-                start = Offset(position - 2.dp.toPx(), position + 2.dp.toPx()),
-                end = Offset(position + 2.dp.toPx(), position - 2.dp.toPx()),
-                strokeWidth = 1.dp.toPx(),
-                cap = StrokeCap.Round
-            )
-        }
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun TopicGridPreview() {
     CoursesTheme {
         TopicGrid()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun TopicCardPreview() {
+    CoursesTheme {
+        TopicCard(topic = DataSource.topics.first())
     }
 }
